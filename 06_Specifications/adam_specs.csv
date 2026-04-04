@@ -10,3 +10,12 @@ ADSL            TRT01P               Planned Treatment for Period 01      Char  
 ADSL            TRT01PN              Planned Treatment for Period 01 (N)  Num       ADSL           TRT01P                    "If TRT01P='Placebo' then 1; If TRT01P='Study Drug' then 2."
 ADSL            SAFFL                Safety Population Flag               Char      N/A            N/A                       Set to 'Y' for all subjects to simulate 100% safety participation.
 ADSL            ITTFL                Intent-To-Treat Population Flag      Char      N/A            N/A                       Set to 'Y' for all subjects.
+ADAE            STUDYID              Study Identifier                     Char      ADSL           STUDYID                   Merge from ADSL.
+ADAE            USUBJID              Unique Subject Identifier            Char      ADSL           USUBJID                   Merge key.
+ADAE            TRTA                 Actual Treatment                     Char      ADSL           TRT01P                    Set equal to TRT01P from ADSL.
+ADAE            TRTAN                Actual Treatment (N)                 Num       ADSL           TRT01PN                   Set equal to TRT01PN from ADSL.
+ADAE            AETERM               Reported Term for the AE             Char      sdtm.ae        AETERM                    Merge from SDTM AE.
+ADAE            AEOUT                Outcome of AE                        Char      sdtm.ae        AEOUT                     Merge from SDTM AE.
+ADAE            ASTDT                Analysis Start Date                  Num       sdtm.ae        AESTDTC                   Convert character AESTDTC to numeric SAS date.
+ADAE            AENDT                Analysis End Date                    Num       sdtm.ae        AEENDTC                   Convert character AEENDTC to numeric SAS date.
+ADAE            ADURN                AE Duration (N)                      Num       ADAE           ASTDT/AENDT               "If both dates are present, calculate as: (AENDT - ASTDT) + 1."

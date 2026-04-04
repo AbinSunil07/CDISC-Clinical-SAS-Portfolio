@@ -19,3 +19,14 @@ ADAE            AEOUT                Outcome of AE                        Char  
 ADAE            ASTDT                Analysis Start Date                  Num       sdtm.ae        AESTDTC                   Convert character AESTDTC to numeric SAS date.
 ADAE            AENDT                Analysis End Date                    Num       sdtm.ae        AEENDTC                   Convert character AEENDTC to numeric SAS date.
 ADAE            ADURN                AE Duration (N)                      Num       ADAE           ASTDT/AENDT               "If both dates are present, calculate as: (AENDT - ASTDT) + 1."
+ADLB            STUDYID              Study Identifier                     Char      ADSL           STUDYID                   Merge from ADSL.
+ADLB            USUBJID              Unique Subject Identifier            Char      ADSL           USUBJID                   Merge key.
+ADLB            TRTA                 Actual Treatment                     Char      ADSL           TRT01P                    Set equal to TRT01P from ADSL.
+ADLB            TRTAN                Actual Treatment (N)                 Num       ADSL           TRT01PN                   Set equal to TRT01PN from ADSL.
+ADLB            PARAMCD              Parameter Code                       Char      sdtm.lb        LBTESTCD                  Set equal to LBTESTCD.
+ADLB            PARAM                Parameter                            Char      sdtm.lb        LBTEST                    Set equal to LBTEST.
+ADLB            ADT                  Analysis Date                        Num       sdtm.lb        LBDTC                     Convert character LBDTC to numeric SAS date.
+ADLB            AVAL                 Analysis Value                       Num       sdtm.lb        LBORRES                   Convert character LBORRES to numeric value.
+ADLB            ABLFL                Baseline Record Flag                 Char      ADLB           ADT                       "Sort by USUBJID, PARAMCD, ADT. Set to 'Y' for the first record of each parameter per patient."
+ADLB            BASE                 Baseline Value                       Num       ADLB           AVAL                      "Retain the AVAL where ABLFL='Y' for all subsequent records of that parameter."
+ADLB            CHG                  Change from Baseline                 Num       ADLB           AVAL/BASE                 "Calculate as: AVAL - BASE."

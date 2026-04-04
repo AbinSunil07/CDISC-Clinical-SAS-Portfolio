@@ -1,0 +1,12 @@
+Target Domain   Target Variable      Variable Label                       Type      Source Data    Source Variable           Mapping Rule
+ADSL            STUDYID              Study Identifier                     Char      sdtm.dm        STUDYID                   Copy directly from DM.
+ADSL            USUBJID              Unique Subject Identifier            Char      sdtm.dm        USUBJID                   Copy directly from DM.
+ADSL            SUBJID               Subject Identifier for the Study     Char      sdtm.dm        SUBJID                    Copy directly from DM.
+ADSL            AGE                  Age                                  Num       sdtm.dm        BRTHDTC                   "Extract year from BRTHDTC and calculate age using the INTCK function relative to a study reference date of '2026-01-01'."
+ADSL            AGEGR1               Pooled Age Group 1                   Char      ADSL           AGE                       "If AGE < 18 then '<18'; Else if 18 <= AGE <= 65 then '18-65'; Else '>65'."
+ADSL            SEX                  Sex                                  Char      sdtm.dm        SEX                       Copy directly from DM.
+ADSL            RACE                 Race                                 Char      sdtm.dm        RACE                      Copy directly from DM.
+ADSL            TRT01P               Planned Treatment for Period 01      Char      ADSL           SUBJID                    "Simulate randomization: If the first character of SUBJID is between '0' and '7', set to 'Placebo'. Otherwise, set to 'Study Drug'."
+ADSL            TRT01PN              Planned Treatment for Period 01 (N)  Num       ADSL           TRT01P                    "If TRT01P='Placebo' then 1; If TRT01P='Study Drug' then 2."
+ADSL            SAFFL                Safety Population Flag               Char      N/A            N/A                       Set to 'Y' for all subjects to simulate 100% safety participation.
+ADSL            ITTFL                Intent-To-Treat Population Flag      Char      N/A            N/A                       Set to 'Y' for all subjects.

@@ -10,4 +10,11 @@ DM	           SEX	                Sex                            	  Char	patient
 DM	           RACE	                Race	                          Char	patients.csv	RACE	          Uppercase the value. Map "BLACK" to "BLACK OR AFRICAN AMERICAN", "NATIVE" to "AMERICAN INDIAN OR ALASKA NATIVE". Keep "WHITE" and "ASIAN" as is.
 DM	           ETHNIC	            Ethnicity	                      Char	patients.csv	ETHNICITY	      If upcase is "NONHISPANIC" set to "NOT HISPANIC OR LATINO". If "HISPANIC" set to "HISPANIC OR LATINO".
 DM	           COUNTRY              Country	                          Char	patients.csv	STATE	          Since all patients are in Massachusetts, hardcode as "USA".
-						
+AE	           STUDYID	            Study Identifier	              Char	SyntheticMass	N/A	              Hardcode as "SYNTHEA-001"
+AE	           DOMAIN	            Domain Abbreviation	              Char	N/A	            N/A	              Hardcode as "AE"
+AE	           USUBJID	            Unique Subject Identifier	      Char	conditions.csv	PATIENT	          Concatenate STUDYID, "-", and the last 8 chars of PATIENT string.
+AE	           AESEQ	            Sequence Number	                  Num	N/A	            N/A	              Sort by USUBJID, AESTDTC, AETERM. Generate sequential number per patient (1, 2, 3...).
+AE	           AETERM	            Reported Term for the AE	      Char	conditions.csv	DESCRIPTION   	  Map directly to DESCRIPTION.
+AE	           AESTDTC	            Start Date/Time of AE	          Char	conditions.csv	START	          Map directly (already ISO 8601 YYYY-MM-DD).
+AE	           AEENDTC	            End Date/Time of AE	              Char	conditions.csv	STOP	          Map directly. If missing, leave blank.
+AE	           AEOUT	            Outcome of AE	                  Char	conditions.csv	STOP	          If STOP is not missing, set to "RECOVERED/RESOLVED". If missing, set to "NOT RECOVERED/NOT RESOLVED".						

@@ -1,28 +1,36 @@
-# Clinical Trial Data Pipeline (CDISC SDTM & ADaM)
+# Clinical Trial Data Pipeline (CDISC SDTM, ADaM & TFLs)
 
 ## Project Overview
-This repository contains an end-to-end clinical data pipeline programmed in SAS. It demonstrates the transformation of raw, Real-World Data (RWD) / Electronic Health Records (EHR) into FDA-submission-ready CDISC SDTM datasets, with Analysis Data Model (ADaM) and TFL generation following in subsequent phases.
+This repository contains an end-to-end clinical data pipeline programmed entirely in SAS. It demonstrates the transformation of raw, Real-World Data (RWD) / Electronic Health Records (EHR) into FDA-submission-ready CDISC datasets, concluding with the generation of Clinical Study Report (CSR) outputs.
 
-The raw data was sourced from Synthea (synthetic patient records), providing a highly realistic simulation of the complex data cleaning and mapping required in modern clinical trials.
+The raw data was sourced from Synthea (synthetic patient records), providing a highly realistic simulation of the complex data cleaning, programmatic problem-solving, and mapping required in modern clinical trials.
 
 ## Tech Stack & Standards
-* **Language:** SAS (Base & Advanced)
-* **Environment:** SAS OnDemand for Academics (Linux Cloud)
+* **Language:** SAS (Base & Advanced, Macro Facility, SQL)
+* **Environment:** SAS OnDemand for Academics (Linux Cloud Environment)
 * **Standards:** CDISC SDTMIG v3.4, ADaMIG
+* **Reporting:** Output Delivery System (ODS RTF), PROC TABULATE, PROC REPORT
 * **Formats:** FDA-compliant SAS Transport Files (`.xpt`)
 
 ## Project Architecture
 This repository mirrors a professional clinical biometrics server environment:
 * `01_RAW_DATA/` - Raw CSV extracts simulating Electronic Data Capture (EDC) / EHR.
-* `02_SDTM/` - SAS mapping programs and final `.xpt` datasets.
-* `03_ADaM/` - *In Progress: Analysis dataset derivations.*
-* `04_TFL/` - *In Progress: Mock Tables, Figures, and Listings.*
-* `06_Specifications/` - Source-to-Target mapping documentation (`sdtm_specs.csv`).
+* `02_SDTM/` - SDTM mapping programs and final `.xpt` datasets (DM, AE, LB).
+* `03_ADaM/` - Analysis dataset derivations and final `.xpt` datasets (ADSL, ADAE, ADLB).
+* `04_TFL/` - SAS reporting programs and presentation-ready RTF outputs.
+* `06_Specifications/` - Source-to-Target mapping documentation (`sdtm_specs.csv`, `adam_specs.csv`).
 
-## Key Engineering Milestones (SDTM Phase)
-* **Demographics (DM):** Engineered core subject-level data, standardizing ISO 8601 dates and mapping to strict CDISC controlled terminology for Race and Ethnicity.
-* **Adverse Events (AE):** Handled longitudinal safety data, deriving unique sequence numbers (`AESEQ`) via `first.variable` processing and calculating event outcomes based on date presence.
-* **Laboratory Test Results (LB):** Processed a massive observation dataset (>500k rows). Successfully engineered programmatic solutions to handle raw CSV data anomalies (shifted column headers), extracted specific lab records, and standardized LOINC codes to meet the strict 8-character CDISC `LBTESTCD` constraints.
+## Key Engineering Milestones
+### 1. Data Engineering & SDTM
+* **Data Anomaly Resolution:** Programmatically aligned shifted CSV column headers in the massive (>500k row) Laboratory dataset during `PROC IMPORT` without hardcoding.
+* **Standardization:** Mapped raw conditions and observations to strict CDISC controlled terminology. Standardized LOINC codes to meet the 8-character `LBTESTCD` constraints and converted raw timestamps to ISO 8601 `YYYY-MM-DD` formats.
+* **Longitudinal Data:** Engineered unique sequence numbers (`AESEQ`, `LBSEQ`) across multiple patient visits using `first.variable` processing.
 
-## Next Steps
-Currently developing the Subject Level Analysis Dataset (ADSL) to establish the foundation for statistical efficacy and safety analysis.
+### 2. Analysis Data Model (ADaM)
+* **Demographics (ADSL):** Calculated subject ages relative to a static study reference date using the `INTCK` function and deterministically simulated treatment group randomizations. 
+* **Safety & Efficacy (ADAE, ADLB):** Merged SDTM domains with ADSL to establish safety flags. Utilized `RETAIN` statements and sorting algorithms to flag baseline lab records (`ABLFL`) and calculate continuous change from baseline (`CHG`).
+
+### 3. Tables, Figures, and Listings (TFLs)
+* **Table 14.1.1 (Demographics):** Utilized `PROC TABULATE` to calculate continuous (n, mean, SD, median, min, max) and categorical (counts, percentages) statistics split by treatment group.
+* **Table 14.3.1 (AE Incidence):** Applied `NODUPKEY` to correctly calculate the number of unique subjects experiencing an adverse event, ensuring FDA reporting compliance.
+* **Listing 16.2.8 (Lab Results):** Generated patient-level data listings using `PROC REPORT` with `compute after` blocks for clean, readable clinical review.
